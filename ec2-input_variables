@@ -1,0 +1,56 @@
+main.tf ---> it is a file which contains the main set of configuration for tour module
+
+resource "aws_instance" "instance1" {
+      ami = "${lookup(var.ami_id,var.region)}"
+      instance_type = "t2.micro"
+      key_name = "${lookup(var.key_pair,var.region)}"
+}
+
+--------------------------------------------------------------------------------------------------------
+provider.tf ---> it is used so that the API can interact with public cloud.
+
+rovider "aws" {
+        region = "${var.region}"
+        access_key = "${var.access_key}"
+        secret_key = "${var.secret_key}"
+}
+
+---------------------------------------------------------------------------------------------------------
+variable.tf ---> these are the files where all variables are declared.
+
+variable "access_key" {}
+variable "secret_key" {}
+variable "region"{
+        default= "us-east-2"
+}
+variable "ami_id"{
+        type = map
+        default = {
+                us-east-1 = "ami-0b5eea76982371e91"
+                us-east-2 = "ami-0a606d8395a538502"
+                us-west-2 = "ami-0ceecbb0f30a902a6"
+        }
+}
+variable "key_pair"{
+        type = map
+        default = {
+                us-east-1 = "jan2023useast1"
+                us-east-2 = "jan2023useast2"
+                us-west-2 = "jan2023uswest2"
+        }
+}
+
+------------------------------------------------------------------------------------------------------
+terraform.tfvars ---> the secret keys will be written in this file and saved in git ignore file.
+
+access_key = "**************"
+secret_key = "**************"
+
+------------------------------------------------------------------------------------------------------
+Commands to be used after creating
+
+1) terraform init
+2) terraform plan
+3) terraform apply
+4) terraform destroy
+                    
